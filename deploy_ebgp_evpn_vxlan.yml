@@ -1,10 +1,11 @@
 ---
 - hosts: aoscx_switches
-  roles:
-    - role: arubanetworks.aoscx_role
+  collections:
+    - arubanetworks.aoscx
   gather_facts: False
   vars:
     ansible_connection: network_cli
+    ansible_network_os: arubanetworks.aoscx.aoscx
   tasks:
     - name: Generate Template for Device
       template: src="{{templates_path | default("./")}}eBGP/{{config_template}}" dest="{{config_path}}{{inventory_hostname}}.conf" mode='0777'
@@ -46,8 +47,8 @@
       loop: "{{vsx_pairs}}"
 
 - hosts: leaf
-  roles:
-    - role: arubanetworks.aoscx_role
+  collections:
+     - arubanetworks.aoscx
   gather_facts: False
   tasks:
     - name: Create BGP Neighbors and EVPN Address Family
